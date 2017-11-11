@@ -1,0 +1,25 @@
+machine:
+  services:
+    - docker
+  environment:
+    APP_NAME: curri-fe
+    BUILD_TARGET_DIR: dist
+    K8S_DEPLOYMENT: k8s/k8s-deployment.yml
+    K8S_SERVICE: k8s/k8s-service.yml
+
+dependencies:
+  cache_directories:
+    - node_modules
+  override:
+    - npm install
+    - ng build
+
+deployment:
+  prod:
+    branch: master
+    commands:
+      - cp docker/nginx/nginx.conf dist
+      - cp docker/nginx/Dockerfile dist
+      - wget https://raw.githubusercontent.com/kolov/k8s-stuff/master/circleci/deploy-aws.sh
+      - chmod +x deploy-aws.sh
+      - ./deploy-aws.sh
