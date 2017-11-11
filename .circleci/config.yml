@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: kolov/node:8
+      - image: trion/ng-cli:1.5.0
     steps:
       - checkout
       - run: npm install
